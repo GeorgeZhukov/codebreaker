@@ -2,6 +2,10 @@ require 'spec_helper'
 
 module Codebreaker
   describe Game do
+    before do
+      $stdout = StringIO.new
+    end
+    
     describe "#initialize" do
 
       it "saves secret code" do
