@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "codebreaker"
+
+loop do
+    game = Codebreaker::Game.new
+    game.start
+    puts "Do you want to start a new game? (yes or no)"
+    command = gets.to_s.chomp.strip
+    break if command != "yes"
+end
