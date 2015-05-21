@@ -51,6 +51,18 @@ module Codebreaker
         end
       end
 
+      it "shows 'Unknown command' when gets command in wrong format" do
+        fake_stdin("qwerty") do
+          expect { subject.start }.to output(/Unknown command/).to_stdout
+        end
+        fake_stdin("6767") do
+          expect { subject.start }.to output(/Unknown command/).to_stdout
+        end
+        fake_stdin("  9") do
+          expect { subject.start }.to output(/Unknown command/).to_stdout
+        end
+      end
+
       it "shows '++++' when gets correct code" do
         subject.instance_variable_set(:@secret_code, [1,2,3,4])
         fake_stdin("1234") do

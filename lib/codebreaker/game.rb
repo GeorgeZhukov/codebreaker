@@ -13,21 +13,26 @@ module Codebreaker
       while @available_attempts > 0
         puts "Type your guess or ? for hint or empty to quit:"
         command = gets.to_s.chomp.strip
-        if command == '?'
-          puts hint
-        elsif command == 'iddqd'
-          puts cheat
-        elsif command.empty?
-          puts "Goodbye"
-          return
-        else
-          guess_result = guess command
-          puts guess_result
-          if guess_result == "++++"
-            win()
+        case command
+          when '?'
+            puts hint
+          when "iddqd"
+            puts cheat
+          when /^[1-6]{4}$/
+            guess_result = guess command
+            puts guess_result
+            if guess_result == "++++"
+              win()
+              return
+            end
+          when ""
+            puts "Goodbye"
             return
-          end
+          else
+            puts "Unknown command."
+
         end
+
       end
     end
 
