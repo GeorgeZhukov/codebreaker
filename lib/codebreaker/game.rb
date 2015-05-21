@@ -2,38 +2,12 @@ require 'codebreaker/player'
 
 module Codebreaker
   class Game
+    attr_reader :available_attempts
+
     def initialize
       @secret_code = (1..4).map { rand 1..6 }
       @has_hint = true
       @available_attempts = 10
-    end
-
-    def start
-      puts "Welcome to the Codebreaker game."
-      while @available_attempts > 0
-        puts "Type your guess or ? for hint or empty to quit:"
-        command = gets.to_s.chomp.strip
-        case command
-          when '?'
-            puts hint
-          when "iddqd"
-            puts cheat
-          when /^[1-6]{4}$/
-            guess_result = guess command
-            puts guess_result
-            if guess_result == "++++"
-              win()
-              return
-            end
-          when ""
-            puts "Goodbye"
-            return
-          else
-            puts "Unknown command."
-
-        end
-
-      end
     end
 
     def guess(code_str)
@@ -45,7 +19,7 @@ module Codebreaker
       data = @secret_code.zip(code)
       result = ''
       # Delete all matches
-      data.delete_if do |item1,item2|
+      data.delete_if do |item1, item2|
         if item1 == item2
           result << '+'
         end
@@ -93,28 +67,12 @@ module Codebreaker
       puts "|--#---Username---Attempts---Complete--|"
       puts "|--------------------------------------|"
 
-      collection.each_with_index do |player,index|
+      collection.each_with_index do |player, index|
         puts "|%3d  %10s %9d %11d%%|" % [index+1, player.username, player.attempts, player.complete]
         puts "|--------------------------------------|"
       end
     end
 
-    private
-    def save_score
-      puts "Do you want to save your score? (yes or no)"
-      command = gets.to_s.chomp.strip
-      if command == "yes"
-        puts "Enter your name:"
-        username = gets.to_s.chomp.strip
-        Player.add_to_collection Player.new(username, 10 - @available_attempts, 100)
-        puts "Your score is saved."
-        Game.render_score_table
-      end
-    end
 
-    def win
-      puts "You won!"
-      save_score
-    end
   end
 end
