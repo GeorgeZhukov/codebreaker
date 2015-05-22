@@ -19,8 +19,9 @@ module Codebreaker
           when /^[1-6]{4}$/
             guess_result = @game.guess command
             puts guess_result
-            if guess_result == "++++"
-              win()
+            if guess_result == "++++" or @game.available_attempts.zero?
+              puts "You won!" if guess_result == "++++"
+              save_score
               return
             end
           when ""
@@ -28,7 +29,6 @@ module Codebreaker
             return
           else
             puts "Unknown command."
-
         end
 
       end
@@ -41,15 +41,11 @@ module Codebreaker
       if command == "yes"
         puts "Enter your name:"
         username = gets.to_s.chomp.strip
-        Player.add_to_collection Player.new(username, 10 - @game.available_attempts, 100)
+        Player.add_to_collection Player.new(username, 10 - @game.available_attempts, @game.complete)
         puts "Your score is saved."
         Game.render_score_table
       end
     end
 
-    def win
-      puts "You won!"
-      save_score
-    end
   end
 end

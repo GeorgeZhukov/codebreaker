@@ -66,13 +66,25 @@ module Codebreaker
         end
       end
 
-      it "calls #win when given code is correct" do
-        game = subject.instance_variable_get(:@game)
-        game.instance_variable_set(:@secret_code, [6,6,6,6])
-        expect(subject).to receive(:win).once
-        fake_stdin("6666") do
-          subject.start
+      context "game over" do
+        before do
+          game = subject.instance_variable_get(:@game)
+          game.instance_variable_set(:@secret_code, [6,6,6,6])
         end
+
+        it "shows 'You won!' when given code is correct" do
+          fake_stdin("6666") do
+            expect { subject.start }.to output(/You won/).to_stdout
+          end
+        end
+
+        it "calls #save_score" do
+          expect(subject).to receive(:save_score)
+          fake_stdin("6666") do
+            subject.start
+          end
+        end
+
       end
 
     end
@@ -100,6 +112,13 @@ module Codebreaker
         end
       end
 
+      it "calls Player.add_to_collection after gets username" do
+        expect(Player).to receive(:add_to_collection).once
+        fake_stdin("yes", "George") do
+          subject.send(:save_score)
+        end
+      end
+
       it "shows 'Your score is saved.' when gets username" do
         fake_stdin("yes", "George") do
           expect { subject.send(:save_score) }.to output(/Your score is saved\./).to_stdout
@@ -114,16 +133,5 @@ module Codebreaker
       end
     end
 
-    describe "#win" do
-
-      it "shows 'You won!'" do
-        expect { subject.send(:win) }.to output(/You won!/).to_stdout
-      end
-
-      it "calls #save_score" do
-        expect(subject).to receive(:save_score)
-        subject.send(:win)
-      end
-    end
   end
 end

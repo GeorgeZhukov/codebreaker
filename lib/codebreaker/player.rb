@@ -18,8 +18,10 @@ module Codebreaker
       return [] unless File.exist?(COLLECTION_FILENAME)
       raw_data = File.read COLLECTION_FILENAME
       collection = Marshal.load raw_data
-      # Descending order
-      return collection.sort_by {|player| [player.attempts]} # TODO: check sorting, add complete
+      collection.sort! do |a,b|
+        [a.attempts, b.complete] <=> [b.attempts, a.complete]
+      end
+      return collection
     end
 
     def self.add_to_collection(player)

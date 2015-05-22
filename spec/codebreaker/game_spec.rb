@@ -30,6 +30,14 @@ module Codebreaker
         game = Game.new
         expect(game.instance_variable_get(:@secret_code)).to eq [1,2,3,4]
       end
+
+      it "saves complete" do
+        expect(subject.instance_variable_defined?(:@complete)).to be true
+      end
+
+      it "sets complete to zero" do
+        expect(subject.instance_variable_get(:@complete)).to be_zero
+      end
     end
 
     describe "#cheat" do
@@ -45,9 +53,29 @@ module Codebreaker
       end
     end
 
+    describe "complete" do
+      it "has getter" do
+        expect(subject.complete).to eq 0
+      end
+    end
+
     describe "#guess" do
       before do
         subject.instance_variable_set(:@secret_code, [1,2,3,4])
+      end
+
+      it "update change @complete from 0 to 25 when 1 exact match" do
+        expect { subject.guess "1555" }.to change { subject.instance_variable_get(:@complete) }.from(0).to(25)
+      end
+
+      it "update change @complete from 25 to 50 when 2 exact match" do
+        subject.instance_variable_set(:@complete, 25)
+        expect { subject.guess "1255" }.to change { subject.instance_variable_get(:@complete) }.from(25).to(50)
+      end
+
+      it "doesn't update @complete from 50 to 25 when 1 exact match after 2 exact match" do
+        subject.instance_variable_set(:@complete, 50)
+        expect { subject.guess "1555" }.not_to change { subject.instance_variable_get(:@complete) }
       end
 
       it "decrease available attempts by 1" do

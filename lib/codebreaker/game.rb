@@ -2,12 +2,13 @@ require 'codebreaker/player'
 
 module Codebreaker
   class Game
-    attr_reader :available_attempts
+    attr_reader :available_attempts, :complete
 
     def initialize
       @secret_code = (1..4).map { rand 1..6 }
       @has_hint = true
       @available_attempts = 10
+      @complete = 0
     end
 
     def guess(code_str)
@@ -37,6 +38,9 @@ module Codebreaker
           end
         end
       end
+
+      complete = result.count('+') * 25
+      @complete = complete if complete > @complete
 
       return result
     end
