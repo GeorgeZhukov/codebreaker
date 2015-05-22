@@ -74,6 +74,9 @@ module Codebreaker
         expect(subject.guess "6123").to eq "---"
       end
 
+      it "returns '+---' when only one exact match and other numbers in different positons" do
+        expect(subject.guess "1423").to eq "+---"
+      end
 
       it "returns empty string when the given code is incorrect" do
         expect(subject.guess "6666").to be_empty
