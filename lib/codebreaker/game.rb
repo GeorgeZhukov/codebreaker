@@ -6,7 +6,6 @@ module Codebreaker
 
     def initialize
       @secret_code = (1..4).map { rand 1..6 }
-      @has_hint = true
       @available_attempts = 10
       @complete = 0
     end
@@ -50,14 +49,12 @@ module Codebreaker
     end
 
     def hint
-      return 'No hint available.' unless @has_hint
-      @has_hint = false
-
+      return @hint if @hint
       result = '****'
       pos = rand(@secret_code.size)
       result[pos] = @secret_code[pos].to_s
 
-      return result
+      return @hint = result
     end
 
   end

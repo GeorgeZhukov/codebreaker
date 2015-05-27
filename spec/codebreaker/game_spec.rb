@@ -17,10 +17,6 @@ module Codebreaker
         expect(subject.instance_variable_get(:@secret_code).join).to match /^[1-6]{4}$/
       end
 
-      it "sets has_hint to true" do
-        expect(subject.instance_variable_get(:@has_hint)).to be true
-      end
-
       it "sets available_attempts to 10" do
         expect(subject.instance_variable_get(:@available_attempts)).to eq 10
       end
@@ -121,10 +117,6 @@ module Codebreaker
         subject.instance_variable_set(:@secret_code, [1,2,3,4])
       end
 
-      it "change has_hint from true to false" do
-        expect { subject.hint }.to change { subject.instance_variable_get(:@has_hint) }.from(true).to(false)
-      end
-
       it "returns correct hint" do
         # Mock position
         allow(subject).to receive(:rand).and_return(2)
@@ -135,13 +127,18 @@ module Codebreaker
         expect(subject.hint).to match /^[1-6*]{4}$/
       end
 
-      it "returns 'No hint available.' when has_hint is false" do
-        subject.instance_variable_set(:@has_hint, false)
-        expect(subject.hint).to eq "No hint available."
+      it "sets correct @hint" do
+        # Mock position
+        allow(subject).to receive(:rand).and_return(2)
+        subject.hint
+        expect(subject.instance_variable_get(:@hint)).to eq "**3*"
       end
-    end
 
-    
+      it "returns @hint if not nil" do
+        subject.instance_variable_set(:@hint, "**3*")
+        expect(subject.hint).to eq "**3*"
+      end      
+    end   
 
   end
 end
