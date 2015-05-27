@@ -60,23 +60,5 @@ module Codebreaker
       return result
     end
 
-    def self.render_score_table
-      collection = Player.load_collection
-      if collection.empty?
-        puts "No players."
-        return
-      end
-
-      puts "|--------------------------------------|"
-      puts "|--#---Username---Attempts---Complete--|"
-      puts "|--------------------------------------|"
-
-      collection.each_with_index do |player, index|
-        puts "|%3d  %10s %9d %11d%%|" % [index+1, player.username, player.attempts, player.complete]
-        puts "|--------------------------------------|"
-      end
-    end
-
-
   end
 end

@@ -34,6 +34,23 @@ module Codebreaker
       end
     end
 
+    def self.render_score_table
+      collection = Player.load_collection
+      if collection.empty?
+        puts "No players."
+        return
+      end
+
+      puts "|--------------------------------------|"
+      puts "|--#---Username---Attempts---Complete--|"
+      puts "|--------------------------------------|"
+
+      collection.each_with_index do |player, index|
+        puts "|%3d  %10s %9d %11d%%|" % [index+1, player.username, player.attempts, player.complete]
+        puts "|--------------------------------------|"
+      end
+    end
+
     private
     def save_score
       puts "Do you want to save your score? (yes or no)"
@@ -43,7 +60,7 @@ module Codebreaker
         username = gets.to_s.chomp.strip
         Player.add_to_collection Player.new(username, 10 - @game.available_attempts, @game.complete)
         puts "Your score is saved."
-        Game.render_score_table
+        GameController.render_score_table
       end
     end
 

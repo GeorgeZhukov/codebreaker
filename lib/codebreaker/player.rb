@@ -18,6 +18,8 @@ module Codebreaker
       return [] unless File.exist?(COLLECTION_FILENAME)
       raw_data = File.read COLLECTION_FILENAME
       collection = Marshal.load raw_data
+
+      # Sort by attempts ascending and complete descending
       collection.sort! do |a,b|
         [a.attempts, b.complete] <=> [b.attempts, a.complete]
       end

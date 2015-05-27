@@ -141,39 +141,7 @@ module Codebreaker
       end
     end
 
-    describe ".render_score_table" do
-      before do
-        michael = Player.new("Michael", 10, 75)
-        george = Player.new("George", 3, 100)
-        niko = Player.new("Niko", 10, 0)
-
-        players = []
-        players << george
-        players << michael
-        players << niko
-
-        allow(Player).to receive(:load_collection).and_return(players)
-      end
-
-      it "renders 'No players' when collection is empty" do
-        allow(Player).to receive(:load_collection).and_return([])
-        expect { Game.render_score_table }.to output(/No players\./).to_stdout
-      end
-
-      xit "renders table header correctly" do
-        expect { Game.render_score_table }.to output(/^[-]{38}/).to_stdout
-        expect { Game.render_score_table }.to output(/Username/).to_stdout
-        expect { Game.render_score_table }.to output(/Attempts/).to_stdout
-        expect { Game.render_score_table }.to output(/Complete/).to_stdout
-      end
-
-      xit "renders table body contains players" do
-        expect { Game.render_score_table }.to output(/George/).to_stdout
-        expect { Game.render_score_table }.to output(/Niko/).to_stdout
-        expect { Game.render_score_table }.to output(/Micahel/).to_stdout
-      end
-
-    end
+    
 
   end
 end

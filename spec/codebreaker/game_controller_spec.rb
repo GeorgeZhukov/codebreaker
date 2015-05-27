@@ -89,6 +89,40 @@ module Codebreaker
 
     end
 
+    describe ".render_score_table" do
+      before do
+        michael = Player.new("Michael", 10, 75)
+        george = Player.new("George", 3, 100)
+        niko = Player.new("Niko", 10, 0)
+
+        players = []
+        players << george
+        players << michael
+        players << niko
+
+        allow(Player).to receive(:load_collection).and_return(players)
+      end
+
+      it "renders 'No players' when collection is empty" do
+        allow(Player).to receive(:load_collection).and_return([])
+        expect { GameController.render_score_table }.to output(/No players\./).to_stdout
+      end
+
+      xit "renders table header correctly" do
+        expect { GameController.render_score_table }.to output(/^[-]{38}/).to_stdout
+        expect { GameController.render_score_table }.to output(/Username/).to_stdout
+        expect { GameController.render_score_table }.to output(/Attempts/).to_stdout
+        expect { GameController.render_score_table }.to output(/Complete/).to_stdout
+      end
+
+      xit "renders table body contains players" do
+        expect { GameController.render_score_table }.to output(/George/).to_stdout
+        expect { GameController.render_score_table }.to output(/Niko/).to_stdout
+        expect { GameController.render_score_table }.to output(/Micahel/).to_stdout
+      end
+
+    end
+
     describe "#save_score" do
       before do
         $stdin = StringIO.new
@@ -126,7 +160,7 @@ module Codebreaker
       end
 
       it "calls #render_score_table" do
-        expect(Game).to receive(:render_score_table).once
+        expect(GameController).to receive(:render_score_table).once
         fake_stdin("yes", "George") do
           subject.send(:save_score)
         end
