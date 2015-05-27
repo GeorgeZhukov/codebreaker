@@ -56,6 +56,13 @@ module Codebreaker
         allow(Marshal).to receive(:load).and_return([subject])
       end
 
+      it "returns maximum 10 items" do
+        20.times do
+          Player.add_to_collection Player.new("George", 3, 100)
+        end
+        expect(Player.load_collection.size).to eq 10
+      end
+
       it "returns an array" do
         expect(Player.load_collection.class).to be Array
       end

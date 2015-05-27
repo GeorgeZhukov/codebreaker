@@ -23,6 +23,9 @@ module Codebreaker
       collection.sort! do |a,b|
         [a.attempts, b.complete] <=> [b.attempts, a.complete]
       end
+
+      # Keep only 10 players
+      collection = collection[0...10] if collection.size > 10
       return collection
     end
 
