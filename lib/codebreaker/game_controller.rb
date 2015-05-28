@@ -58,7 +58,7 @@ module Codebreaker
       if command == "yes"
         puts "Enter your name:"
         username = gets.to_s.chomp.strip
-        Player.add_to_collection Player.new(username, 10 - @game.available_attempts, @game.complete)
+        Player.add_to_collection Player.new(username, Game::GIVEN_ATTEMPTS - @game.available_attempts, @game.complete)
         puts "Your score is saved."
         GameController.render_score_table
       end

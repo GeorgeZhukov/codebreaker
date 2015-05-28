@@ -2,11 +2,15 @@ require 'codebreaker/player'
 
 module Codebreaker
   class Game
+    GIVEN_ATTEMPTS = 10
+    CODE_LENGTH = 4
+    DIGIT_RANGE = 1..6
+
     attr_reader :available_attempts, :complete
 
     def initialize
-      @secret_code = (1..4).map { rand 1..6 }
-      @available_attempts = 10
+      @secret_code = (1..CODE_LENGTH).map { rand DIGIT_RANGE }
+      @available_attempts = GIVEN_ATTEMPTS
       @complete = 0
     end
 
@@ -38,7 +42,7 @@ module Codebreaker
         end
       end
 
-      complete = result.count('+') * 25
+      complete = result.count('+') * (100 / CODE_LENGTH)
       @complete = complete if complete > @complete
 
       return result

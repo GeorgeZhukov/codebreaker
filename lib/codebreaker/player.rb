@@ -1,5 +1,6 @@
 module Codebreaker
   class Player
+    KEEP_PLAYERS_COUNT = 10
     COLLECTION_FILENAME = "players.bin"
 
     attr_reader :username, :attempts, :complete
@@ -25,7 +26,7 @@ module Codebreaker
       end
 
       # Keep only 10 players
-      collection = collection[0...10] if collection.size > 10
+      collection = collection[0...KEEP_PLAYERS_COUNT] if collection.size > KEEP_PLAYERS_COUNT
       return collection
     end
 
