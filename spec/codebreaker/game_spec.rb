@@ -78,28 +78,87 @@ module Codebreaker
         expect { subject.guess "6666" }.to change{ subject.instance_variable_get(:@available_attempts) }.by -1
       end
 
-      it "returns '++++' when the given code is correct" do
-        expect(subject.guess "1234").to eq "++++"
+      sample_data = {
+         "1234": "++++",
+         "1235": "+++",
+         "1236": "+++",
+         "1243": "++--",
+         "1245": "++-",
+         "1246": "++-",
+         "1253": "++-",
+         "1254": "+++",
+         "1256": "++",
+         "1263": "++-",
+         "1264": "+++",
+         "1265": "++",
+         "1324": "++--",
+         "1325": "+--",
+         "1326": "+--",
+         "1342": "+---",
+         "1345": "+--",
+         "1346": "+--",
+         "1352": "+--",
+         "1354": "++-",
+         "1356": "+-",
+         "1362": "+--",
+         "1364": "++-",
+         "1365": "+-",
+         "1423": "+---",
+         "1425": "+--",
+         "1426": "+--",
+         "1432": "++--",
+         "1435": "++-",
+         "1436": "++-",
+         "1452": "+--",
+         "1453": "+--",
+         "1456": "+-",
+         "1462": "+--",
+         "1463": "+--",
+         "1465": "+-",
+         "1523": "+--",
+         "1524": "++-",
+         "1526": "+-",
+         "1532": "++-",
+         "1534": "+++",
+         "1536": "++",
+         "1542": "+--",
+         "1543": "+--",
+         "1546": "+-",
+         "1562": "+-",
+         "1563": "+-",
+         "1564": "++",
+         "1623": "+--",
+         "1624": "++-",
+         "1625": "+-",
+         "1632": "++-",
+         "1634": "+++",
+         "1635": "++",
+         "1642": "+--",
+         "1643": "+--",
+         "1645": "+-",
+         "1652": "+-",
+         "1653": "+-",
+         "1654": "++",
+         "2134": "++--",
+         "2135": "+--",
+         "2136": "+--",
+         "2143": "----"
+      };
+
+      sample_data.each do |k,v|
+        it "returns #{v} when #{k}" do 
+          expect(subject.guess k.to_s).to eq v
+        end
       end
 
-      it "returns '----' when the given code is correct, but numbers in different positions" do
-        expect(subject.guess "4321").to eq "----"
-      end
+      context "give all possible variants" do
+        sample_data = (1..6).to_a.permutation(4).map(&:join)
 
-      it "returns '++' when only two matches" do
-        expect(subject.guess "1654").to eq "++"
-      end
-
-      it "returns '+-' when one exact match and one not exact match" do
-        expect(subject.guess "1646").to eq "+-"
-      end
-
-      it "returns '---' when three numbers in different positions" do
-        expect(subject.guess "6123").to eq "---"
-      end
-
-      it "returns '+---' when only one exact match and other numbers in different positons" do
-        expect(subject.guess "1423").to eq "+---"
+        sample_data.each do |code|
+          it do 
+            expect(subject.guess code).to match /[1-6]{0,4}/
+          end
+        end
       end
 
       it "returns empty string when the given code is incorrect" do
