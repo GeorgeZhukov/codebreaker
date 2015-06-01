@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/GeorgeZhukov/codebreaker.svg?style=svg)](https://circleci.com/gh/GeorgeZhukov/codebreaker)
+
 # Codebreaker
 
 The codebreaker game written via TDD and RSpec framework.
