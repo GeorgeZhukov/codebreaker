@@ -1,3 +1,5 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'codebreaker'
 
@@ -17,4 +19,10 @@ end
 
 RSpec.configure do |conf|
   conf.include(Helpers)
+end
+
+if ENV['CIRCLE_ARTIFACTS']
+  require 'simplecov'
+  dir = File.join("..", "..", "..", ENV['CIRCLE_ARTIFACTS'], "coverage")
+  SimpleCov.coverage_dir(dir)
 end
