@@ -77,7 +77,17 @@ module Codebreaker
       it "decrease available attempts by 1" do
         expect { subject.guess "6666" }.to change{ subject.instance_variable_get(:@available_attempts) }.by -1
       end
+      
+      it "returns empty string when the given code is incorrect" do
+        expect(subject.guess "6666").to be_empty
+      end
 
+      it "returns 'No available attempts.' when available_attempts is zero" do
+        subject.instance_variable_set(:@available_attempts, 0)
+        expect(subject.guess "3232").to eq "No available attempts."
+      end
+      
+      
       sample_data = {
          "1234"=>"++++",
          "1235"=>"+++",
@@ -146,7 +156,7 @@ module Codebreaker
       };
 
       sample_data.each do |k,v|
-        it "returns #{v} when #{k}" do 
+        it "returns #{v} when #{k}" do
           expect(subject.guess k.to_s).to eq v
         end
       end
@@ -155,19 +165,10 @@ module Codebreaker
         sample_data = (1..6).to_a.permutation(4).map(&:join)
 
         sample_data.each do |code|
-          it "returns an answer in valid format for guess of #{code}" do 
+          it "returns an answer in valid format for guess of #{code}" do
             expect(subject.guess code).to match /[1-6]{0,4}/
           end
         end
-      end
-
-      it "returns empty string when the given code is incorrect" do
-        expect(subject.guess "6666").to be_empty
-      end
-
-      it "returns 'No available attempts.' when available_attempts is zero" do
-        subject.instance_variable_set(:@available_attempts, 0)
-        expect(subject.guess "3232").to eq "No available attempts."
       end
     end
 

@@ -1,4 +1,5 @@
 require 'codebreaker/player'
+require 'codebreaker/matcher'
 
 module Codebreaker
   class Game
@@ -18,31 +19,13 @@ module Codebreaker
       return 'No available attempts.' if @available_attempts.zero?
       @available_attempts -= 1
 
-      code = code_str.each_char.map { |ch| ch.to_i }
+      code = code_str.each_char.map { |ch| ch.to_i }      
+      matcher = Matcher.new(@secret_code, code)
+      matcher.calc     
+      
+      result = '+' * matcher.exact_match + '-' * matcher.just_match
 
-      data = @secret_code.zip(code)
-      result = ''
-      # Delete all matches
-      data.delete_if do |item1, item2|
-        if item1 == item2
-          result << '+'
-        end
-      end
-
-      # Start search for '-' if
-      # there is still some data
-      unless data.empty?
-        data, code = data.transpose
-        code.each do |item|
-          pos = data.index(item)
-          if pos
-            result << '-'
-            data.delete_at pos
-          end
-        end
-      end
-
-      complete = result.count('+') * (100 / CODE_LENGTH)
+      complete = matcher.exact_match * (100 / CODE_LENGTH)
       @complete = complete if complete > @complete
 
       return result
